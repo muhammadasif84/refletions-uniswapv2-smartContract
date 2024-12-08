@@ -1,37 +1,29 @@
-name: Test Smart Contracts with Hardhat on Multiple Node Versions
+name: deploy
 
 on:
-    workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  test:
+  unit-test:
+
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        node-version: [14, 16, 18, 20]  # Specify the Node.js versions to test
+        node-version: [18.x, 20.x, 22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Checkout repository
-        uses: actions/upload-artifact@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}  # Use matrix version
-
-      - name: Install dependencies
-        run: |
-          npm install
-
-      - name: Compile contracts
-        run: npx hardhat compile
-
-      - name: Run tests with Hardhat
-        run: npx hardhat test
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: hardhat-test-results
-          path: ./test-results
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: "Installing Depedencies"
+      run: npm i
+    - name: "Test command"
+      run: npx hardhat test
