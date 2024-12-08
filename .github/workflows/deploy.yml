@@ -1,4 +1,4 @@
-name: Test Smart Contracts
+name: Test Smart Contracts with Hardhat on Multiple Node Versions
 
 on:
   push:
@@ -11,7 +11,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+    strategy:
+      matrix:
+        node-version: [14, 16, 18, 20]  # Specify the Node.js versions to test
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -19,15 +22,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: ${{ matrix.node-version }}  # Use matrix version
 
       - name: Install dependencies
         run: |
           npm install
 
+      - name: Compile contracts
+        run: npx hardhat compile
+
       - name: Run tests with Hardhat
-        run: |
-          npx hardhat test
+        run: npx hardhat test
 
       - name: Upload test results
         if: always()
