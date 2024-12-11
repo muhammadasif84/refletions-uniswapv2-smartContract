@@ -6,7 +6,7 @@ async function main() {
   const [owner] = await ethers.getSigners();
   console.log("Deployer : ", owner.address)
   // Parameters
-  const uniswapRouterAddress = "0x920b806E40A00E02E7D2b94fFc89860fDaEd3640"; // Uniswap V2 Router
+  const uniswapRouterAddress = "0xedf6066a2b290C185783862C7F4776A2C8077AD1"; // Uniswap V2 Router
   const initialSupply = ethers.parseUnits("1000000000", 18); // 1 Billion tokens
   const amountSafeMoon = ethers.parseUnits("2500000", 18); // SafeMoon tokens for liquidity
   const amountWETH = ethers.parseEther("0.01"); // WETH for liquidity
